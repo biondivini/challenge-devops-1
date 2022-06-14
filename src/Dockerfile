@@ -1,4 +1,4 @@
-FROM python:3.9-buster
+FROM python:alpine
 
 RUN mkdir -p /opt/app
 RUN mkdir -p /opt/app/aluraflix
