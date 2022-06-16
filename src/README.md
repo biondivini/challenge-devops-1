@@ -38,7 +38,6 @@ Ref: https://www.alura.com.br/artigos/django-instalacao-configuracao-e-escrevend
     docker run -it -p 8000:8000 -e DJANGO_SUPERUSER_USERNAME=admin -e DJANGO_SUPERUSER_PASSWORD=admin123@ -e DJANGO_SUPERUSER_EMAIL=admin@example.com aluraflix
 
 
----
 ## Paths da aplicação
 A aplicação implementa o [defaultRouter](https://www.django-rest-framework.org/api-guide/routers/#defaultrouter) implementando apenas `{prefix}/` o que significa que disponibiliza metodos HTTP como GET e POST por padrão.
 
