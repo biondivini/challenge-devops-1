@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aluraflix-service
+  labels:
+    app: aluraflix
+    project: devops-challenge
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: aluraflix
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aluraflix-deployment
+  labels:
+    app: aluraflix
+    project: devops-challenge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aluraflix
+  template:
+    metadata:
+      labels:
+        app: aluraflix
+    spec:
+      containers:
+      - name: aluraflix-container
+        image: biondivini/aluraflix:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+          - configMapRef:
+              name: aluraflix-configmap

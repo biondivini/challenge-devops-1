@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aluraflix-configmap
+data:
+  DJANGO_SUPERUSER_USERNAME: superuser
+  DJANGO_SUPERUSER_PASSWORD: p@ssW0rd
+  DJANGO_SUPERUSER_EMAIL: superuser@example.com

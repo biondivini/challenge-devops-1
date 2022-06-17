@@ -5,12 +5,12 @@ Seguir os passos indicados nos seguintes links:
 
 # Escopo do template
 No universo de templates azure existem algun niveis de escopo com schemas diferentes
+* Tenant
+* ManagementGroups 
 * subscriptions
 * resourceGroup
-* ManagementGroups 
-* Tenant
 
-Vou trabalhar no nivel de subscription, para poder criar resourceGroup completo sobre os compontentes necessários para o desafio - podendo em algum momento simular criação de ambientes "staging", "production" no nivel de Resource Group.
+Para criar um resource group é necessário trabalhar no nivel de subscription, posteriormente para o aks e demais recursos da aplicação o escopo desce e trabalhamos no escopo de resourceGroup.
 
 Referências:
 1. https://docs.microsoft.com/pt-br/azure/azure-resource-manager/templates/deploy-to-subscription
@@ -25,12 +25,13 @@ az login
 ``` bash
 az account set --subscription [SubscriptionID/SubscriptionName]
 ```
+### Criando ResourceGroup
 3 - Criar deployment do ambiente com base no template
 ``` bash
-az deployment sub create \
-  --name primeiroDeployment \
-  --location eastus2 \
-  --template-uri $template \
+az deployment sub create `
+  --name chalangeDeployment `
+  --location eastus2 `
+  --template-uri $template `
   --parameters $parameters
 ```
 para uso local trocar `template-uri` por `template-file`
@@ -39,6 +40,27 @@ para uso local trocar `template-uri` por `template-file`
 ``` bash
 az deployment sub list
 ```
+### Criando AKS
+5 - visualizar deployment criado
+``` bash
+az deployment group create `
+  --resource-group rg-app-aluraflix `
+  --template-file $template `
+  --parameters $parameters
+```
+### Configurando AKS
+6 - Atribuir contexto do kubectl ao aks
+``` bash
+az aks get-credentials `
+  --name aks-cluster-dev `
+  --overwrite-existing `
+  --resource-group rg-app-aluraflix 
+```
+
+para pegar o ip do host
+https://stackoverflow.com/questions/62224705/disallowedhost-django-deployment-in-kubernetes-cluster-invalid-http-host-header
+
+5 - visualizar deployment criado
 
 ## Vivendo e aprendendo
 <b>Nota 1</b>: Barra invertida nao funciona no powershell do vs-code, ao inves disso trocar por crase. Referencia ["Expressão ausente após operador unário '--'"](https://pt.stackoverflow.com/questions/419382/express%C3%A3o-ausente-ap%C3%B3s-operador-un%C3%A1rio-ao-tentar-instalar-o-postgres-pelo)
