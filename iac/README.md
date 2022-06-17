@@ -57,11 +57,6 @@ az aks get-credentials `
   --resource-group rg-app-aluraflix 
 ```
 
-para pegar o ip do host
-https://stackoverflow.com/questions/62224705/disallowedhost-django-deployment-in-kubernetes-cluster-invalid-http-host-header
-
-5 - visualizar deployment criado
-
 ## Vivendo e aprendendo
 <b>Nota 1</b>: Barra invertida nao funciona no powershell do vs-code, ao inves disso trocar por crase. Referencia ["Expressão ausente após operador unário '--'"](https://pt.stackoverflow.com/questions/419382/express%C3%A3o-ausente-ap%C3%B3s-operador-un%C3%A1rio-ao-tentar-instalar-o-postgres-pelo)
 
