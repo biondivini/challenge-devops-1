@@ -1,0 +1,205 @@
+{
+  "source": 2,
+  "revision": 7,
+  "environments": [
+    {
+      "id": 1,
+      "name": "Deploy to AKS",
+      "rank": 1,
+      "variables": {},
+      "variableGroups": [],
+      "preDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 1
+          }
+        ],
+        "approvalOptions": {
+          "requiredApproverCount": null,
+          "releaseCreatorCanBeApprover": false,
+          "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+          "enforceIdentityRevalidation": false,
+          "timeoutInMinutes": 0,
+          "executionOrder": 1
+        }
+      },
+      "deployStep": {
+        "id": 2
+      },
+      "postDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 3
+          }
+        ],
+        "approvalOptions": {
+          "requiredApproverCount": null,
+          "releaseCreatorCanBeApprover": false,
+          "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+          "enforceIdentityRevalidation": false,
+          "timeoutInMinutes": 0,
+          "executionOrder": 2
+        }
+      },
+      "deployPhases": [
+        {
+          "deploymentInput": {
+            "parallelExecution": {
+              "parallelExecutionType": 0
+            },
+            "agentSpecification": null,
+            "skipArtifactsDownload": false,
+            "artifactsDownloadInput": {
+              "downloadInputs": []
+            },
+            "queueId": 4,
+            "demands": [],
+            "enableAccessToken": false,
+            "timeoutInMinutes": 0,
+            "jobCancelTimeoutInMinutes": 1,
+            "condition": "succeeded()",
+            "overrideInputs": {}
+          },
+          "rank": 1,
+          "phaseType": 1,
+          "name": "Agent job",
+          "refName": null,
+          "workflowTasks": [
+            {
+              "environment": {},
+              "taskId": "cbc316a2-586f-4def-be79-488a1f503564",
+              "version": "0.*",
+              "name": "kubectl apply",
+              "refName": "",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "retryCountOnTaskFailure": 0,
+              "definitionType": null,
+              "overrideInputs": {},
+              "condition": "succeeded()",
+              "inputs": {
+                "kubernetesServiceEndpoint": "f93aba7c-3e00-4e60-adaa-ac780d1eb189",
+                "namespace": "default",
+                "command": "apply",
+                "useConfigurationFile": "true",
+                "configuration": "$(System.DefaultWorkingDirectory)/_devops-challenge-pipeline/drop/deployment.yaml",
+                "arguments": "",
+                "secretType": "dockerRegistry",
+                "secretArguments": "",
+                "containerRegistryType": "Azure Container Registry",
+                "dockerRegistryEndpoint": "",
+                "azureSubscriptionEndpoint": "",
+                "azureContainerRegistry": "",
+                "secretName": "",
+                "forceUpdate": "true",
+                "configMapName": "aluraflix-configmap",
+                "forceUpdateConfigMap": "true",
+                "useConfigMapFile": "true",
+                "configMapFile": "$(System.DefaultWorkingDirectory)/_devops-challenge-pipeline/drop/configmap.yaml",
+                "configMapArguments": "",
+                "versionOrLocation": "version",
+                "versionSpec": "1.7.0",
+                "checkLatest": "false",
+                "specifyLocation": "",
+                "cwd": "$(System.DefaultWorkingDirectory)",
+                "outputFormat": "json",
+                "kubectlOutput": ""
+              }
+            }
+          ]
+        }
+      ],
+      "environmentOptions": {
+        "emailNotificationType": "OnlyOnFailure",
+        "emailRecipients": "release.environment.owner;release.creator",
+        "skipArtifactsDownload": false,
+        "timeoutInMinutes": 0,
+        "enableAccessToken": false,
+        "publishDeploymentStatus": true,
+        "badgeEnabled": false,
+        "autoLinkWorkItems": false,
+        "pullRequestDeploymentEnabled": false
+      },
+      "demands": [],
+      "conditions": [
+        {
+          "name": "ReleaseStarted",
+          "conditionType": 1,
+          "value": ""
+        }
+      ],
+      "executionPolicy": {
+        "concurrencyCount": 1,
+        "queueDepthCount": 0
+      },
+      "schedules": [],
+
+      "retentionPolicy": {
+        "daysToKeep": 30,
+        "releasesToKeep": 3,
+        "retainBuild": true
+      },
+      "processParameters": {},
+      "properties": {
+        "BoardsEnvironmentType": {
+          "$type": "System.String",
+          "$value": "unmapped"
+        },
+        "LinkBoardsWorkItems": {
+          "$type": "System.String",
+          "$value": "False"
+        }
+      },
+      "preDeploymentGates": {
+        "id": 0,
+        "gatesOptions": null,
+        "gates": []
+      },
+      "postDeploymentGates": {
+        "id": 0,
+        "gatesOptions": null,
+        "gates": []
+      },
+      "environmentTriggers": [],
+      "badgeUrl": "https://vsrm.dev.azure.com/viniciusbiondi/_apis/public/Release/badge/5b4f8a50-84f9-4905-8d2e-67b6d0813120/1/1"
+    }
+  ],
+  "artifacts": [
+    {
+      "sourceId": "5b4f8a50-84f9-4905-8d2e-67b6d0813120:1",
+      "type": "Build",
+      "alias": "_devops-challenge-pipeline",
+      "definitionReference": {
+        "artifactSourceDefinitionUrl": {
+          "id": "https://dev.azure.com/viniciusbiondi/_permalink/_build/index?collectionId=825cbe3f-5e6c-499b-8c22-0671dc7770b9&projectId=5b4f8a50-84f9-4905-8d2e-67b6d0813120&definitionId=1",
+          "name": ""
+        },
+        "defaultVersionType": {
+          "id": "latestType",
+          "name": "Latest"
+        },
+        "definition": {
+          "id": "1",
+          "name": "devops-challenge-pipeline"
+        },
+        "project": {
+          "id": "5b4f8a50-84f9-4905-8d2e-67b6d0813120",
+          "name": "devops-challenge"
+        }
+      },
+      "isPrimary": true,
+      "isRetained": false
+    }
+  ],
+  
+
+  "name": "aks-release-pipeline"
+}
