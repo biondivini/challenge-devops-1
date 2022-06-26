@@ -35,6 +35,12 @@
         "vmssNodePool": {
             "value": true
         },
+        "acrName": {
+            "value": "devopschallenge101"
+        },
+        "acrResourceGroup": {
+            "value": "rg-app-aluraflix"
+        },
         "tags": {
             "value": {
                 "project": "devops-challenge"

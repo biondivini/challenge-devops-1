@@ -95,12 +95,60 @@
         "description": "Boolean flag to turn on and off secret store CSI driver."
       }
     },
+    "acrName": {
+        "type": "string",
+        "metadata": {
+            "description": "Specify the name of the Azure Container Registry."
+        }
+    },
+    "acrResourceGroup": {
+        "type": "string",
+        "metadata": {
+            "description": "The name of the resource group the container registry is associated with."
+        }
+    },
+    "guidValue": {
+        "type": "string",
+        "metadata": {
+            "description": "The unique id used in the role assignment of the kubernetes service to the container registry service. It is recommended to use the default value."
+        },
+        "defaultValue": "[newGuid()]"
+    },
     "tags": {
       "type": "object",
       "defaultValue": {}
     }
   },
   "resources": [
+    {
+        "name": "ConnectAKStoACR-ea3e3be9-fff4-49e3-9771-115acf29d047",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2017-05-10",
+        "resourceGroup": "[parameters('acrResourceGroup')]",
+        "dependsOn": [
+            "[concat('Microsoft.ContainerService/managedClusters/', parameters('resourceName'))]"
+        ],
+        "properties": {
+            "mode": "Incremental",
+            "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                    {
+                        "apiVersion": "2018-09-01-preview",
+                        "type": "Microsoft.ContainerRegistry/registries/providers/roleAssignments",
+                        "name": "[concat(parameters('acrName'), '/Microsoft.Authorization/', parameters('guidValue'))]",
+                        "properties": {
+                            "principalId": "[reference(parameters('resourceName'), '2021-07-01').identityProfile.kubeletidentity.objectId]",
+                            "principalType": "ServicePrincipal",
+                            "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7f951dda-4ed3-4680-a7ca-43fe172d538d')]",
+                            "scope": "[resourceId(parameters('acrResourceGroup'),'Microsoft.ContainerRegistry/registries/', parameters('acrName'))]"
+                        }
+                    }
+                ]
+            }
+        }
+    },
     {
       "apiVersion": "2021-07-01",
       "dependsOn": [],
@@ -151,7 +199,7 @@
         }
       },
       "tags": {
-        "project": "devops-challange"
+        "project": "devops-challenge"
       },
       "sku": {
         "name": "Basic",
