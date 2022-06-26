@@ -1,12 +1,8 @@
 FROM python:3.10-slim-buster
 
 RUN mkdir -p /opt/app
-RUN mkdir -p /opt/app/aluraflix
 
-COPY requirements.txt manage.py entrypoint.sh /opt/app/
-COPY setup /opt/app/setup/
-COPY entrypoint.sh /opt/app/
-COPY aluraflix /opt/app/aluraflix/
+COPY . /opt/app/
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
