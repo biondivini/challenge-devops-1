@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: aluraflix-container
-        image: biondivini/aluraflix:latest
+        image: devopschallenge101.azurecr.io/biondivini/challenge-devops-1:latest
         ports:
         - containerPort: 8000
         envFrom:
