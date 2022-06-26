@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: devopschallenge101.azurecr.io
+        username: ${{ secrets.acr_devopschallenge101_username }}
+        password: ${{ secrets.acr_devopschallenge101_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/src" -f  "src/Dockerfile" -t devopschallenge101.azurecr.io/aksclusterdev:${{ github.sha }} --label dockerfile-path=src/Dockerfile
+        docker push devopschallenge101.azurecr.io/aksclusterdev:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_aksclusterdev_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep aks-cluster-dev9d90 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace aks-cluster-dev9d90`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: aks-cluster-dev9d90
+        container-registry-url: devopschallenge101.azurecr.io
+        container-registry-username: ${{ secrets.acr_devopschallenge101_username }}
+        container-registry-password: ${{ secrets.acr_devopschallenge101_password }}
+        secret-name: aksclusterdedockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: aks-cluster-dev9d90
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          devopschallenge101.azurecr.io/aksclusterdev:${{ github.sha }}
+        imagepullsecrets: |
+          aksclusterdedockerauth
