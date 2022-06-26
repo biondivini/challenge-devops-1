@@ -1,32 +1,28 @@
-name: $(date:yyyyMMdd)$(rev:.r)
-jobs:
-- job: Job_1
-  displayName: Agent job 1
-  timeoutInMinutes: 1
-  cancelTimeoutInMinutes: 1
-  pool:
-    vmImage: ubuntu-18.04
-  steps:
-  - checkout: self
-    clean: true
-  - task: Docker@0
-    displayName: Build an image
-    inputs:
-      azureSubscriptionEndpoint: 1036a871-8440-4c19-b351-88177aeca970
-      azureContainerRegistry: '{"loginServer":"devopschallenge101.azurecr.io", "id" : "/subscriptions/72f92fb0-a8f1-4d32-abed-e06e486acac2/resourceGroups/rg-app-aluraflix/providers/Microsoft.ContainerRegistry/registries/devopschallenge101"}'
-      includeLatestTag: true
-  - task: Docker@0
-    displayName: Push an image
-    inputs:
-      azureSubscriptionEndpoint: 1036a871-8440-4c19-b351-88177aeca970
-      azureContainerRegistry: '{"loginServer":"devopschallenge101.azurecr.io", "id" : "/subscriptions/72f92fb0-a8f1-4d32-abed-e06e486acac2/resourceGroups/rg-app-aluraflix/providers/Microsoft.ContainerRegistry/registries/devopschallenge101"}'
-      action: Push an image
-      includeLatestTag: true
-  - task: CopyFiles@2
-    displayName: 'Copy Files to:  $(build.artifactstagingdirectory)'
-    inputs:
-      SourceFolder: src/manifests
-      TargetFolder: ' $(build.artifactstagingdirectory)'
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: drop'
-...
+pool:
+  name: Azure Pipelines
+  timeoutInMinutes: 5
+
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    azureSubscription: 'resourcegroup.azure_aluraflix'
+    azureContainerRegistry: '{"loginServer":"devopschallenge101.azurecr.io", "id" : "/subscriptions/72f92fb0-a8f1-4d32-abed-e06e486acac2/resourceGroups/rg-app-aluraflix/providers/Microsoft.ContainerRegistry/registries/devopschallenge101"}'
+    includeLatestTag: true
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    azureSubscription: 'resourcegroup.azure_aluraflix'
+    azureContainerRegistry: '{"loginServer":"devopschallenge101.azurecr.io", "id" : "/subscriptions/72f92fb0-a8f1-4d32-abed-e06e486acac2/resourceGroups/rg-app-aluraflix/providers/Microsoft.ContainerRegistry/registries/devopschallenge101"}'
+    action: 'Push an image'
+    includeLatestTag: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to:  $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: src/manifests
+    TargetFolder: ' $(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
